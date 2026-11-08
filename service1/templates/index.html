@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microservice String Reverser</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 60px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .card {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 4px;
+            display: none;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Microservice String Reverser</h2>
+    <form id="string-form">
+        <div class="form-group">
+            <label for="text-input">Enter your text:</label>
+            <input type="text" id="text-input" placeholder="z. B. Hallo Welt" required>
+        </div>
+        <button type="submit">Send to Service 2 & reverse</button>
+    </form>
+
+    <div id="result-box" class="result">
+        <strong>Response from Service 2:</strong>
+        <p id="reversed-text" style="font-size: 1.2em; word-break: break-all;"></p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('string-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const textInput = document.getElementById('text-input').value;
+        const resultBox = document.getElementById('result-box');
+        const reversedText = document.getElementById('reversed-text');
+
+        resultBox.style.display = 'none';
+        resultBox.classList.remove('error');
+
+        try {
+            const response = await fetch('/process', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: textInput })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                reversedText.innerText = data.reversed_text_from_service2;
+            } else {
+                resultBox.classList.add('error');
+                reversedText.innerText = 'Fehler: ' + (data.error || 'Unbekannter Fehler');
+            }
+        } catch (err) {
+            resultBox.classList.add('error');
+            reversedText.innerText = 'Netzwerkfehler beim Aufruf von Service 1';
+        }
+
+        resultBox.style.display = 'block';
+    });
+</script>
+
+</body>
+</html>
