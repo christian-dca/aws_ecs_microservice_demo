@@ -5,7 +5,7 @@ from flask import Flask, jsonify, render_template, request
 app = Flask(__name__)
 
 SERVICE2_URL = os.environ.get(
-    "SERVICE2_URL", "http://localhost:5001"
+    "SERVICE2_URL", "http://localhost:5001/reverse"
 )
 
 
@@ -27,7 +27,7 @@ def process():
 
   try:
     response = requests.post(
-        f"{SERVICE2_URL}/reverse", json={"text": input_text}, timeout=5.0
+        SERVICE2_URL, json={"text": input_text}, timeout=5.0
     )
     response.raise_for_status()
     s2_data = response.json()
