@@ -23,16 +23,16 @@ Parameters:
   FrontendImage:
     Type: String
     Description: ECR image URI for the frontend container (replace ACCOUNT_ID)
-    Default: "ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/frontend:latest"
+    Default: "ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/service1-repo:latest"
 
   ProcessorImage:
     Type: String
     Description: ECR image URI for the processor container (replace ACCOUNT_ID)
-    Default: "ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/processor:latest"
+    Default: "ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/service2-repo:latest"
 
   ClusterName:
     Type: String
-    Default: sidecar-cluster
+    Default: microservice-cluster
     Description: Name of the ECS cluster
 
   ServiceName:
